@@ -89,6 +89,8 @@
       font-size: 1.2rem;
       font-weight: bold;
       letter-spacing: 1px;
+      text-align: center;
+      padding: 0 10px;
     }
 
     /* === CONTEÚDO PRINCIPAL === */
@@ -117,6 +119,7 @@
       align-items: center;
       justify-content: center;
       margin-bottom: 20px;
+      overflow: hidden;
     }
 
     .typing-text {
@@ -127,13 +130,14 @@
       white-space: nowrap;
       overflow: hidden;
       animation: blink 0.75s step-end infinite;
+      max-width: 100%;
     }
 
     @keyframes blink {
 
       from,
       to {
-        border-color: transparent
+        border-color: transparent;
       }
 
       50% {
@@ -185,6 +189,21 @@
         transform: scale(1);
       }
     }
+
+    /* Responsividade para celulares */
+    @media (max-width: 480px) {
+      .container {
+        padding: 25px 20px;
+      }
+
+      .typing-text {
+        font-size: 1.15rem;
+      }
+
+      .letter-card {
+        padding: 18px;
+      }
+    }
   </style>
 </head>
 
@@ -203,19 +222,18 @@
     </div>
 
     <!-- CARTINHA FINAL -->
-    <!-- CARTINHA FINAL -->
     <div class="letter-card" id="finalLetter">
       <h2>Apenas a Minha Verdade ❤️</h2>
       <p>
-        Eu sei que as coisas estão um caos. Sei o quanto está difícil para você lidar com a sua vida, com a sua família e até mesmo com o que está acontecendo entre nós dois.
+        Eu sei que as coisas estão um caos. Sei o quanto está difícil para você lidar com a sua vida, com a sua família e até mesmo com o momento que estamos enfrentando.
       </p>
       <p>
-        Eu não vou fingir que está tudo bem: eu realmente detesto algumas das suas atitudes atuais. Sinceramente, só queria que você parasse de seguir aquela pessoa... Eu me importei com os seus sentimentos e parei de seguir quem te incomodava, então machuca ver que o mesmo cuidado não voltou para mim.
+        Mas, independente de qualquer tempestade ou de qualquer fase ruim, eu quero que você saiba de uma coisa: meu amor por você continua intacto. Eu estou aqui para te dar chances, para construir e para segurar a sua mão todos os dias.
       </p>
       <p>
-        Talvez você se pergunte se isso tudo faz sentido, mas a verdade é que eu ainda te amo. Eu te dou chances de fazer dar certo todo santo dia. Só te peço de coração: não faça todo esse meu amor ser em vão.
+        Nenhum caos no mundo é maior do que o que eu sinto por você. Não deixe todo esse nosso amor ser em vão, porque eu continuo escolhendo você, sempre.
       </p>
-      <div class="signature">Com amor e esperança 💕</div>
+      <div class="signature">Com todo o meu amor 💕</div>
     </div>
   </div>
 
@@ -234,15 +252,21 @@
     const typingBox = document.getElementById('typingBox');
     const finalLetter = document.getElementById('finalLetter');
 
-    // Remove o preloader após 3.5 segundos
-    window.addEventListener('load', () => {
+    function iniciarAplicacao() {
       setTimeout(() => {
         preloader.style.opacity = '0';
         preloader.style.visibility = 'hidden';
         mainContent.classList.add('show');
         iniciarSequenciaFrases(0);
       }, 3500);
-    });
+    }
+
+    // Inicialização segura
+    if (document.readyState === 'complete') {
+      iniciarAplicacao();
+    } else {
+      window.addEventListener('load', iniciarAplicacao);
+    }
 
     // Função para simular o efeito de digitação de cada frase
     function digitarTexto(texto, callback) {
@@ -256,18 +280,18 @@
           clearInterval(interval);
           setTimeout(callback, 1500); // Espera 1.5s com a frase na tela
         }
-      }, 100); // Velocidade de digitação por letra
+      }, 100);
     }
 
-    // Função para rodar a sequência de frases e depois mostrar o texto final
+    // Função para rodar a sequência de frases e mostrar a carta final
     function iniciarSequenciaFrases(index) {
       if (index < frases.length) {
         digitarTexto(frases[index], () => {
           iniciarSequenciaFrases(index + 1);
         });
       } else {
-        // Esconde a caixa de digitação e mostra a carta final
-        document.querySelector('.phrase-container').style.display = 'none';
+        const phraseContainer = document.querySelector('.phrase-container');
+        phraseContainer.style.display = 'none';
         finalLetter.style.display = 'block';
       }
     }
